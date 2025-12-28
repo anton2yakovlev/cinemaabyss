@@ -1,0 +1,36 @@
+@startuml C4_Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Диаграмма контейнеров системы CinemaAbyss
+
+Person(user, "Пользователь", "Смотрит фильмы, управляет подписками, осуществляет платежи")
+
+System_Boundary(cinemaabyss_system, "CinemaAbyss System") {
+    Container(proxy_service, "Proxy Service (API Gateway)", "Go", "Единая точка входа, постепенная миграция трафика (Strangler Fig)")
+    
+    Container(monolith, "Monolith", "Go", "Управление пользователями, фильмами, платежами, подписками")
+    Container(movies_service, "Movies Service", "Go", "Микросервис для управления фильмами и метаданными")
+    Container(events_service, "Events Service", "Go", "Обработка событий через Kafka (producer/consumer)")
+    
+    Container(kafka, "Message Broker", "Kafka", "Брокер сообщений для асинхронной обработки событий")
+    
+    ContainerDb(postgres, "PostgreSQL", "PostgreSQL", "Единая база данных: пользователи, фильмы, платежи, подписки")
+}
+
+Rel(user, proxy_service, "API запросы", "HTTP/REST")
+
+Rel(proxy_service, monolith, "Маршрутизация запросов", "HTTP/REST", "users, payments, subscriptions, movies (постепенно)")
+Rel(proxy_service, movies_service, "Постепенная миграция трафика", "HTTP/REST", "movies (% миграции)")
+Rel(proxy_service, events_service, "События", "HTTP/REST")
+
+Rel(monolith, postgres, "Запросы к БД", "SQL", "users, movies, payments, subscriptions")
+Rel(movies_service, postgres, "Запросы к БД", "SQL", "movies, movie_genres (shared database)")
+
+Rel(events_service, kafka, "Публикует/читает события", "Kafka Protocol", "movie-events, user-events, payment-events")
+
+SHOW_LEGEND()
+
+@enduml
+
