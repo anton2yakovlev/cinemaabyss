@@ -49,10 +49,21 @@ async def proxy_request(
                 follow_redirects=False
             )
             
+            # Убираем заголовки которые могут конфликтовать
+            response_headers = dict(response.headers)
+            headers_to_remove = [
+                "content-length",
+                "transfer-encoding",
+                "content-encoding",
+                "connection"
+            ]
+            for header in headers_to_remove:
+                response_headers.pop(header, None)
+            
             return Response(
                 content=response.content,
                 status_code=response.status_code,
-                headers=dict(response.headers),
+                headers=response_headers,
                 media_type=response.headers.get("content-type")
             )
         except httpx.RequestError as e:
@@ -84,7 +95,7 @@ async def health_check():
 
 
 @app.api_route("/api/movies/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
-async def movies_proxy(path: str, request: Request):
+async def movies_proxy(request: Request, path: str = ''):
     """
     Проксирует запросы к movies API
     В зависимости от настроек направляет к монолиту или микросервису
