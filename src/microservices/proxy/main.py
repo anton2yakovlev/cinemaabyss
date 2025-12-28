@@ -1,0 +1,155 @@
+import os
+import random
+from typing import Optional
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import JSONResponse
+import httpx
+from pydantic_settings import BaseSettings
+
+
+class Settings(BaseSettings):
+    """Настройки приложения из переменных окружения"""
+    port: int = 8000
+    monolith_url: str = "http://localhost:8080"
+    movies_service_url: str = "http://localhost:8081"
+    events_service_url: str = "http://localhost:8082"
+    gradual_migration: bool = True
+    movies_migration_percent: int = 50
+
+    class Config:
+        env_file = ".env"
+        case_sensitive = False
+
+
+settings = Settings()
+app = FastAPI(title="CinemaAbyss Proxy Service")
+
+
+async def proxy_request(
+    url: str,
+    method: str,
+    path: str,
+    headers: dict,
+    body: Optional[bytes] = None,
+    params: dict = None
+) -> Response:
+    """
+    Проксирует запрос к целевому сервису
+    """
+    target_url = f"{url}{path}"
+    
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        try:
+            response = await client.request(
+                method=method,
+                url=target_url,
+                headers=headers,
+                content=body,
+                params=params,
+                follow_redirects=False
+            )
+            
+            return Response(
+                content=response.content,
+                status_code=response.status_code,
+                headers=dict(response.headers),
+                media_type=response.headers.get("content-type")
+            )
+        except httpx.RequestError as e:
+            return JSONResponse(
+                status_code=503,
+                content={"error": "Service unavailable", "details": str(e)}
+            )
+
+
+def should_route_to_microservice() -> bool:
+    """
+    Определяет, нужно ли направить запрос к микросервису
+    """
+    if not settings.gradual_migration:
+        return True
+    
+    return random.randint(1, 100) <= settings.movies_migration_percent
+
+
+@app.get("/health")
+async def health_check():
+    f"""Хэлс чек прокси-сервиса"""
+    return {
+        "status": "healthy",
+        "service": "proxy-service",
+        "gradual_migration": settings.gradual_migration,
+        "movies_migration_percent": settings.movies_migration_percent
+    }
+
+
+@app.api_route("/api/movies/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def movies_proxy(path: str, request: Request):
+    """
+    Проксирует запросы к movies API
+    В зависимости от настроек направляет к монолиту или микросервису
+    """
+    body = await request.body()
+    
+    # Решаем куда направить запрос
+    if should_route_to_microservice():
+        target_url = settings.movies_service_url
+        service = "movies-microservice"
+    else:
+        target_url = settings.monolith_url
+        service = "monolith"
+    
+    print(f"Routing /api/movies/{path} to {service}")
+    
+    return await proxy_request(
+        url=target_url,
+        method=request.method,
+        path=f"/api/movies/{path}",
+        headers=dict(request.headers),
+        body=body if body else None,
+        params=dict(request.query_params)
+    )
+
+
+@app.api_route("/api/events/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def events_proxy(path: str, request: Request):
+    """
+    Проксирует запросы к events API (всегда к микросервису)
+    """
+    body = await request.body()
+    
+    print(f"Routing /api/events/{path} to events-microservice")
+    
+    return await proxy_request(
+        url=settings.events_service_url,
+        method=request.method,
+        path=f"/api/events/{path}",
+        headers=dict(request.headers),
+        body=body if body else None,
+        params=dict(request.query_params)
+    )
+
+
+@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def default_proxy(path: str, request: Request):
+    """
+    Проксирует все остальные запросы к монолиту
+    """
+    body = await request.body()
+    
+    print(f"Routing /{path} to monolith")
+    
+    return await proxy_request(
+        url=settings.monolith_url,
+        method=request.method,
+        path=f"/{path}",
+        headers=dict(request.headers),
+        body=body if body else None,
+        params=dict(request.query_params)
+    )
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=settings.port)
+
