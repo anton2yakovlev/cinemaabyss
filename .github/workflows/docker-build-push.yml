@@ -186,11 +186,21 @@ jobs:
           echo "Waiting for services to be ready..."
           sleep 30
           
-          echo "Checking running containers..."
+          echo "=== Checking docker-compose services ==="
           docker compose ps
           
-          echo "Checking container statuses..."
-          docker ps -a | grep cinemaabyss
+          echo "=== Checking all cinemaabyss containers ==="
+          docker ps -a | grep cinemaabyss || echo "No containers found"
+          
+          echo "=== Checking logs for monolith ==="
+          docker compose logs --tail=50 monolith || echo "Monolith not running"
+          
+          echo "=== Checking logs for movies-service ==="
+          docker compose logs --tail=50 movies-service || echo "Movies service not running"
+          
+          echo "=== Testing network connectivity ==="
+          docker run --rm --network=cinemaabyss-network alpine ping -c 2 monolith || echo "Cannot ping monolith"
+          docker run --rm --network=cinemaabyss-network alpine ping -c 2 movies-service || echo "Cannot ping movies-service"
 
       - name: Build test container
         run: docker build -t cinemaabyss-api-tests ./tests/postman
