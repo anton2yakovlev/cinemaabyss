@@ -130,7 +130,6 @@ jobs:
     permissions:
       contents: read
       packages: read
-      checks: write
 
     steps:
       - name: Checkout repository
@@ -187,12 +186,6 @@ jobs:
       - name: Run API tests
         working-directory: ./tests/postman
         run: node run-tests.js --environment docker --reporters cli,junit
-
-      - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: tests/postman/reports/*.xml
 
       - name: Upload test reports
         uses: actions/upload-artifact@v4
