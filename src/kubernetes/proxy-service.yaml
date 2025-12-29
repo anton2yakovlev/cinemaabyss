@@ -23,7 +23,7 @@ spec:
       containers:
       - name: proxy-service
         image: ghcr.io/anton2yakovlev/cinemaabyss/proxy-service:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         env:
