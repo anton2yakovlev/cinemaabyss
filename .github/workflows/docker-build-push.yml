@@ -158,8 +158,14 @@ jobs:
           services:
             monolith:
               image: ${REPO}/monolith:${TAG}
+              depends_on:
+                postgres:
+                  condition: service_healthy
             movies-service:
               image: ${REPO}/movies-service:${TAG}
+              depends_on:
+                postgres:
+                  condition: service_healthy
             events-service:
               image: ${REPO}/events-service:${TAG}
             proxy-service:
