@@ -175,18 +175,17 @@ jobs:
           
           docker compose ps
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install test dependencies
-        working-directory: ./tests/postman
-        run: npm install
+      - name: Build test container
+        run: docker build -t cinemaabyss-api-tests ./tests/postman
 
       - name: Run API tests
-        working-directory: ./tests/postman
-        run: node run-tests.js --environment docker --reporters cli,junit
+        run: |
+          docker run --rm \
+            --network=cinemaabyss-network \
+            -v "$(pwd)/tests/postman/reports:/app/reports" \
+            cinemaabyss-api-tests \
+            --environment docker \
+            --reporters cli,junit
 
       - name: Upload test reports
         uses: actions/upload-artifact@v4

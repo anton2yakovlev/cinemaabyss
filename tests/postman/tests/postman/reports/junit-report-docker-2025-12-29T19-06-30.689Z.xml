@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="CinemaAbyss API Tests" tests="22" time="0.514">
+  <testsuite name="Monolith Service / Health Check" id="c9383bdd-d9f9-433e-98b2-7122b3ce9816" timestamp="2025-12-29T19:06:30.830Z" tests="1" failures="0" errors="0" time="0.038">
+    <testcase name="Status code is 200" time="0.038" classname="MonolithServiceHealthCheck"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get All Users" id="c68bcc16-f5ba-473d-ba70-7f123bd1e05f" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.019">
+    <testcase name="Status code is 200" time="0.019" classname="MonolithServiceGetAllUsers"/>
+    <testcase name="Response is an array" time="0.019" classname="MonolithServiceGetAllUsers"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create User" id="5203a72e-2a2d-4ce6-af58-2c2d1ca62ad4" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.009">
+    <testcase name="Status code is 201" time="0.009" classname="MonolithServiceCreateUser"/>
+    <testcase name="Response has id" time="0.009" classname="MonolithServiceCreateUser"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get User by ID" id="99724584-52bb-457d-a67c-d52ecf7c9466" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.005">
+    <testcase name="Status code is 200" time="0.005" classname="MonolithServiceGetUserById"/>
+    <testcase name="User ID matches" time="0.005" classname="MonolithServiceGetUserById"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get All Movies" id="6e654149-74e5-444c-88ad-9bad4156df38" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.009">
+    <testcase name="Status code is 200" time="0.009" classname="MonolithServiceGetAllMovies"/>
+    <testcase name="Response is an array" time="0.009" classname="MonolithServiceGetAllMovies"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create Movie" id="35ec39cf-fe68-45e2-85e6-44ed2bd551f7" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="Status code is 201" time="0.007" classname="MonolithServiceCreateMovie"/>
+    <testcase name="Response has id" time="0.007" classname="MonolithServiceCreateMovie"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get Movie by ID" id="569665d3-48e7-4375-8ddd-7f937358db90" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.006">
+    <testcase name="Status code is 200" time="0.006" classname="MonolithServiceGetMovieById"/>
+    <testcase name="Movie ID matches" time="0.006" classname="MonolithServiceGetMovieById"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create Payment" id="f1932c2e-c8b6-48be-9d2c-95b3b9ed220c" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.008">
+    <testcase name="Status code is 201" time="0.008" classname="MonolithServiceCreatePayment"/>
+    <testcase name="Response has id" time="0.008" classname="MonolithServiceCreatePayment"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get Payment by ID" id="8c1d37fc-4be7-4884-9103-c6b82a4ff83f" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.006">
+    <testcase name="Status code is 200" time="0.006" classname="MonolithServiceGetPaymentById"/>
+    <testcase name="Payment ID matches" time="0.006" classname="MonolithServiceGetPaymentById"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create Subscription" id="136633d8-f9cb-460f-86e6-7e56713adb36" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.010">
+    <testcase name="Status code is 201" time="0.010" classname="MonolithServiceCreateSubscription"/>
+    <testcase name="Response has id" time="0.010" classname="MonolithServiceCreateSubscription"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get Subscription by ID" id="cbe3e063-5f55-4118-b86b-6f6df34fbb0c" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="Status code is 200" time="0.007" classname="MonolithServiceGetSubscriptionById"/>
+    <testcase name="Subscription ID matches" time="0.007" classname="MonolithServiceGetSubscriptionById"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Health Check" id="139d2911-fc68-4343-adab-ad31aa8f0941" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.019">
+    <testcase name="Status code is 200" time="0.019" classname="MoviesMicroserviceHealthCheck"/>
+    <testcase name="Status is true" time="0.019" classname="MoviesMicroserviceHealthCheck"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Get All Movies" id="6eaa383f-5acc-4f9d-a383-44ca8f9cda59" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.026">
+    <testcase name="Status code is 200" time="0.026" classname="MoviesMicroserviceGetAllMovies"/>
+    <testcase name="Response is an array" time="0.026" classname="MoviesMicroserviceGetAllMovies"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Create Movie" id="98f88246-3faa-4cfa-8c19-1adb6fe5cab7" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.012">
+    <testcase name="Status code is 201" time="0.012" classname="MoviesMicroserviceCreateMovie"/>
+    <testcase name="Response has id" time="0.012" classname="MoviesMicroserviceCreateMovie"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Get Movie by ID" id="39c05bc5-e052-47ce-89b0-eaf34d91ea7a" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.005">
+    <testcase name="Status code is 200" time="0.005" classname="MoviesMicroserviceGetMovieById"/>
+    <testcase name="Movie ID matches" time="0.005" classname="MoviesMicroserviceGetMovieById"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Health Check" id="1a37f47b-30f1-44fb-817f-16cbab1471e4" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.066">
+    <testcase name="Status code is 200" time="0.066" classname="EventsMicroserviceHealthCheck"/>
+    <testcase name="Status is true" time="0.066" classname="EventsMicroserviceHealthCheck"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Create Movie Event" id="453c8406-4664-4255-829a-aae4c0ea42e2" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.098">
+    <testcase name="Status code is 201" time="0.098" classname="EventsMicroserviceCreateMovieEvent"/>
+    <testcase name="Response has status success" time="0.098" classname="EventsMicroserviceCreateMovieEvent"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Create User Event" id="7f35e42f-8a0a-41ca-a021-c2ec399573da" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.020">
+    <testcase name="Status code is 201" time="0.020" classname="EventsMicroserviceCreateUserEvent"/>
+    <testcase name="Response has status success" time="0.020" classname="EventsMicroserviceCreateUserEvent"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Create Payment Event" id="99db5b59-3a67-42d7-8806-dd6788ba1b65" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.018">
+    <testcase name="Status code is 201" time="0.018" classname="EventsMicroserviceCreatePaymentEvent"/>
+    <testcase name="Response has status success" time="0.018" classname="EventsMicroserviceCreatePaymentEvent"/>
+  </testsuite>
+  <testsuite name="Proxy Service / Health Check" id="7f7cadb6-f3aa-4d1b-b35b-fd8595f4578f" timestamp="2025-12-29T19:06:30.830Z" tests="1" failures="0" errors="0" time="0.044">
+    <testcase name="Status code is 200" time="0.044" classname="ProxyServiceHealthCheck"/>
+  </testsuite>
+  <testsuite name="Proxy Service / Get All Movies via Proxy" id="8fce7141-df7b-4d41-bd70-5f3783926d1b" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.069">
+    <testcase name="Status code is 200" time="0.069" classname="ProxyServiceGetAllMoviesViaProxy"/>
+    <testcase name="Response is an array" time="0.069" classname="ProxyServiceGetAllMoviesViaProxy"/>
+  </testsuite>
+  <testsuite name="Proxy Service / Get All Users via Proxy" id="d955d6f0-f902-4d31-a089-e8f8001d9cdd" timestamp="2025-12-29T19:06:30.830Z" tests="2" failures="0" errors="0" time="0.013">
+    <testcase name="Status code is 200" time="0.013" classname="ProxyServiceGetAllUsersViaProxy"/>
+    <testcase name="Response is an array" time="0.013" classname="ProxyServiceGetAllUsersViaProxy"/>
+  </testsuite>
+</testsuites>
