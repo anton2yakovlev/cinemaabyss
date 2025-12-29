@@ -127,6 +127,10 @@ jobs:
   api-tests:
     needs: build-and-push
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+      checks: write
 
     steps:
       - name: Checkout repository
@@ -164,12 +168,12 @@ jobs:
 
       - name: Start services with docker-compose
         run: |
-          docker-compose up -d
+          docker compose up -d
           
           echo "Waiting for services to be ready..."
           sleep 30
           
-          docker-compose ps
+          docker compose ps
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -199,9 +203,9 @@ jobs:
 
       - name: Show logs on failure
         if: failure()
-        run: docker-compose logs
+        run: docker compose logs
 
       - name: Cleanup
         if: always()
-        run: docker-compose down -v
+        run: docker compose down -v
 
