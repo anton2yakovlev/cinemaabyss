@@ -165,6 +165,19 @@ jobs:
             proxy-service:
               image: ${REPO}/proxy-service:${TAG}
           EOF
+          
+          echo "Created docker-compose.override.yml:"
+          cat docker-compose.override.yml
+
+      - name: Pull images
+        run: |
+          TAG=${{ steps.image-tag.outputs.tag }}
+          REPO=${{ env.REGISTRY }}/${{ github.repository }}
+          
+          docker pull ${REPO}/monolith:${TAG}
+          docker pull ${REPO}/movies-service:${TAG}
+          docker pull ${REPO}/events-service:${TAG}
+          docker pull ${REPO}/proxy-service:${TAG}
 
       - name: Start services with docker-compose
         run: |
@@ -173,15 +186,22 @@ jobs:
           echo "Waiting for services to be ready..."
           sleep 30
           
+          echo "Checking running containers..."
           docker compose ps
+          
+          echo "Checking container statuses..."
+          docker ps -a | grep cinemaabyss
 
       - name: Build test container
         run: docker build -t cinemaabyss-api-tests ./tests/postman
 
       - name: Run API tests
         run: |
+          NETWORK_NAME=$(docker compose ps -q monolith | xargs docker inspect -f '{{range $net,$v := .NetworkSettings.Networks}}{{$net}}{{end}}' | head -n1)
+          echo "Detected network: $NETWORK_NAME"
+          
           docker run --rm \
-            --network=cinemaabyss-network \
+            --network="$NETWORK_NAME" \
             -v "$(pwd)/tests/postman/reports:/app/reports" \
             cinemaabyss-api-tests \
             --environment docker \
