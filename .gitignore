@@ -1,0 +1,2 @@
+src/kubernetes/dockerconfigsecret.yaml
+src/kubernetes/secret.yaml
