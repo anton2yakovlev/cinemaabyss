@@ -197,11 +197,8 @@ jobs:
 
       - name: Run API tests
         run: |
-          NETWORK_NAME=$(docker compose ps -q monolith | xargs docker inspect -f '{{range $net,$v := .NetworkSettings.Networks}}{{$net}}{{end}}' | head -n1)
-          echo "Detected network: $NETWORK_NAME"
-          
           docker run --rm \
-            --network="$NETWORK_NAME" \
+            --network=cinemaabyss-network \
             -v "$(pwd)/tests/postman/reports:/app/reports" \
             cinemaabyss-api-tests \
             --environment docker \
