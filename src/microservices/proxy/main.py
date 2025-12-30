@@ -1,10 +1,9 @@
-import os
 import random
 from typing import Optional
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 import httpx
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -16,9 +15,10 @@ class Settings(BaseSettings):
     gradual_migration: bool = True
     movies_migration_percent: int = 50
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False
+    )
 
 
 settings = Settings()
@@ -85,7 +85,7 @@ def should_route_to_microservice() -> bool:
 
 @app.get("/health")
 async def health_check():
-    f"""Хэлс чек прокси-сервиса"""
+    """Хэлс чек прокси-сервиса"""
     return {
         "status": "healthy",
         "service": "proxy-service",
