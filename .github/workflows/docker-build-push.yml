@@ -1,0 +1,241 @@
+name: Docker Build and Push
+
+env:
+  REGISTRY: ghcr.io
+
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/docker-build-push.yml'
+  release:
+    types: [published]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Monolith
+        id: meta-monolith
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/monolith
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Monolith
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/monolith
+          file: ./src/monolith/Dockerfile
+          push: true
+          tags: ${{ steps.meta-monolith.outputs.tags }}
+          labels: ${{ steps.meta-monolith.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata for Movies Service
+        id: meta-movies
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/movies-service
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Movies Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/microservices/movies
+          file: ./src/microservices/movies/Dockerfile
+          push: true
+          tags: ${{ steps.meta-movies.outputs.tags }}
+          labels: ${{ steps.meta-movies.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata for Events Service
+        id: meta-events
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/events-service
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Events Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/microservices/events
+          file: ./src/microservices/events/Dockerfile
+          push: true
+          tags: ${{ steps.meta-events.outputs.tags }}
+          labels: ${{ steps.meta-events.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata for Proxy Service
+        id: meta-proxy
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/proxy-service
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Proxy Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/microservices/proxy
+          file: ./src/microservices/proxy/Dockerfile
+          push: true
+          tags: ${{ steps.meta-proxy.outputs.tags }}
+          labels: ${{ steps.meta-proxy.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  api-tests:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set image tag
+        id: image-tag
+        run: |
+          echo "tag=sha-$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Update docker-compose with built images
+        run: |
+          TAG=${{ steps.image-tag.outputs.tag }}
+          REPO=${{ env.REGISTRY }}/${{ github.repository }}
+          
+          cat > docker-compose.override.yml << EOF
+          version: '3.8'
+          services:
+            monolith:
+              image: ${REPO}/monolith:${TAG}
+              depends_on:
+                postgres:
+                  condition: service_healthy
+            movies-service:
+              image: ${REPO}/movies-service:${TAG}
+              depends_on:
+                postgres:
+                  condition: service_healthy
+            events-service:
+              image: ${REPO}/events-service:${TAG}
+            proxy-service:
+              image: ${REPO}/proxy-service:${TAG}
+          EOF
+          
+          echo "Created docker-compose.override.yml:"
+          cat docker-compose.override.yml
+
+      - name: Pull images
+        run: |
+          TAG=${{ steps.image-tag.outputs.tag }}
+          REPO=${{ env.REGISTRY }}/${{ github.repository }}
+          
+          docker pull ${REPO}/monolith:${TAG}
+          docker pull ${REPO}/movies-service:${TAG}
+          docker pull ${REPO}/events-service:${TAG}
+          docker pull ${REPO}/proxy-service:${TAG}
+
+      - name: Start services with docker-compose
+        run: |
+          docker compose up -d
+          
+          echo "Waiting for services to be ready..."
+          sleep 30
+          
+          echo "=== Checking docker-compose services ==="
+          docker compose ps
+          
+          echo "=== Checking all cinemaabyss containers ==="
+          docker ps -a | grep cinemaabyss || echo "No containers found"
+          
+          echo "=== Checking logs for monolith ==="
+          docker compose logs --tail=50 monolith || echo "Monolith not running"
+          
+          echo "=== Checking logs for movies-service ==="
+          docker compose logs --tail=50 movies-service || echo "Movies service not running"
+          
+          echo "=== Testing network connectivity ==="
+          docker run --rm --network=cinemaabyss-network alpine ping -c 2 monolith || echo "Cannot ping monolith"
+          docker run --rm --network=cinemaabyss-network alpine ping -c 2 movies-service || echo "Cannot ping movies-service"
+
+      - name: Build test container
+        run: docker build -t cinemaabyss-api-tests ./tests/postman
+
+      - name: Run API tests
+        run: |
+          docker run --rm \
+            --network=cinemaabyss-network \
+            -v "$(pwd)/tests/postman/reports:/app/reports" \
+            cinemaabyss-api-tests \
+            --environment docker \
+            --reporters cli,junit
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: tests/postman/reports/
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down -v
+

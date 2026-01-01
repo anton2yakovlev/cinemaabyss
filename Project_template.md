@@ -5,8 +5,22 @@
 1. Спроектируйте to be архитектуру КиноБездны, разделив всю систему на отдельные домены и организовав интеграционное взаимодействие и единую точку вызова сервисов.
 Результат представьте в виде контейнерной диаграммы в нотации С4.
 Добавьте ссылку на файл в этот шаблон
-[ссылка на файл](ссылка)
+----
+Было создано две версии диаграмы контейнеров. Для текущего состояния проекта и для to be состояния.
 
+### Архитектура проекта на данный момент
+
+[Pump схема](schemas/C4/container/C4-container.puml)
+
+![C4 диаграма контейнеров](schemas/C4/container/C4_Container.png)
+
+### To be архитектура проекта, после разделения на микросервисы
+
+[Pump схема](schemas/C4/container/C4-container-tobe.puml)
+
+![C4 диаграма контейнеров](schemas/C4/container/C4_Container_ToBe.png)
+
+Все новые сервисы я решил реализовать на языке Python, так как это мой основной язык, но в рамках реализации реального проекта следовало бы выбрать основной стек команды, то есть Go.
 
 ## Задание 2
 
@@ -47,6 +61,10 @@
    ```
 - Протестируйте постепенный переход, изменив переменную окружения MOVIES_MIGRATION_PERCENT в файле docker-compose.yml.
 
+Пример отправки 10 запросов к прокси при значении MOVIES_MIGRATION_PERCENT == 50%.
+
+![Proxy servies](screenshots/proxy_1.png)
+
 ### 2. Kafka
  Вам как архитектуру нужно также проверить гипотезу насколько просто реализовать применение Kafka в данной архитектуре.
 
@@ -58,6 +76,14 @@
 
 Необходимые тесты для проверки этого API вызываются при запуске npm run test:local из папки tests/postman 
 Приложите скриншот тестов и скриншот состояния топиков Kafka http://localhost:8090 
+
+----
+
+**Скриншоты тестов и состояния топиков:**  
+
+![Прогон тестов после выполнения задания 2](screenshots/postman-report.png) 
+
+![Состояние топиков в kafka-ui](screenshots/kafka-topics-report.png)
 
 
 ## Задание 3
@@ -271,8 +297,13 @@ cat .docker/config.json | base64
   Часть тестов с health-чек упадет, но создание событий отработает.
   Откройте логи event-service и сделайте скриншот обработки событий
 
+  ![Логи event-service с обработкой событий 1](screenshots/events_1.png) 
+  ![Логи event-service с обработкой событий 2](screenshots/events_2.png) 
+
 #### Шаг 3
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
+  ![Вызов https://cinemaabyss.example.com/api/movies](screenshots/movies_api_1.png) 
+  ![Логи event-service после вызова тестов](screenshots/events_3.png) 
 
 
 ## Задание 4
@@ -349,6 +380,14 @@ minikube tunnel
 https://cinemaabyss.example.com/api/movies
 и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
 
+![Скриншот развертывания](screenshots/helm_check.png)
+
+![Вывод https://cinemaabyss.example.com/api/movies](screenshots/movies_api_2.png) 
+
+
+Запуск тестов после развертывания k8s. Команда запуска: `npm run test:kubernetes`
+
+![Результаты запуска тестов](screenshots/k8s_tests.png) 
 
 # Задание 5
 Компания планирует активно развиваться и для повышения надежности, безопасности, реализации сетевых паттернов типа Circuit Breaker и канареечного деплоя вам как архитектору необходимо развернуть istio и настроить circuit breaker для monolith и movies сервисов.
@@ -414,6 +453,8 @@ You can see 21 for the upstream_rq_pending_overflow value which means 21 calls s
 ```
 
 Приложите скриншот работы circuit breaker'а
+
+![circuit breaker](screenshots/istio.png)
 
 Удаляем все
 ```bash

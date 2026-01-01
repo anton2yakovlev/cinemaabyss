@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="CinemaAbyss API Tests" tests="22" time="5.502">
+  <testsuite name="Monolith Service / Health Check" id="15e36ba7-a53a-4365-849d-ab0a4521e39a" timestamp="2026-01-01T18:47:54.798Z" tests="1" failures="0" errors="0" time="5.034">
+    <testcase name="Status code is 200" time="5.034" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get All Users" id="d1970548-638d-422d-b6e4-f804b7a5c78e" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.030">
+    <testcase name="Status code is 200" time="0.030" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response is an array" time="0.030" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create User" id="d8b99a3f-aa3b-4217-bae2-d711800e026a" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.015">
+    <testcase name="Status code is 201" time="0.015" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has id" time="0.015" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get User by ID" id="6cff6092-65ca-42cc-93be-0ace76c896bc" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.030">
+    <testcase name="Status code is 200" time="0.030" classname="CinemaAbyssApiTests"/>
+    <testcase name="User ID matches" time="0.030" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get All Movies" id="1e4faa0e-6c42-4c2d-a257-fd0c06d1c5e4" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.030">
+    <testcase name="Status code is 200" time="0.030" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response is an array" time="0.030" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create Movie" id="3dfe8238-700c-47d1-88a5-38ae9400def5" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.025">
+    <testcase name="Status code is 201" time="0.025" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has id" time="0.025" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get Movie by ID" id="9078e807-e5c1-45a2-bf7e-215ef39c3946" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.024">
+    <testcase name="Status code is 200" time="0.024" classname="CinemaAbyssApiTests"/>
+    <testcase name="Movie ID matches" time="0.024" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create Payment" id="34c61519-d6b3-4127-b1ac-de06a28151dd" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.036">
+    <testcase name="Status code is 201" time="0.036" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has id" time="0.036" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get Payment by ID" id="894d48f3-2124-499e-9d3e-c4830c1339ab" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.024">
+    <testcase name="Status code is 200" time="0.024" classname="CinemaAbyssApiTests"/>
+    <testcase name="Payment ID matches" time="0.024" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Create Subscription" id="bba6d1cd-0a2e-408c-892f-ab8487c9ac4d" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.021">
+    <testcase name="Status code is 201" time="0.021" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has id" time="0.021" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Monolith Service / Get Subscription by ID" id="79a8166e-9be0-4756-bd4f-b3852eb4cc89" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.026">
+    <testcase name="Status code is 200" time="0.026" classname="CinemaAbyssApiTests"/>
+    <testcase name="Subscription ID matches" time="0.026" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Health Check" id="75c9b6be-8053-4203-8196-13e75ff3a507" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.024">
+    <testcase name="Status code is 200" time="0.024" classname="CinemaAbyssApiTests"/>
+    <testcase name="Status is true" time="0.024" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Get All Movies" id="52e493b4-be5c-4138-b030-8ea3068b2a99" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.026">
+    <testcase name="Status code is 200" time="0.026" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response is an array" time="0.026" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Create Movie" id="c703bce5-ef93-4885-8213-d5c724c3fb12" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.020">
+    <testcase name="Status code is 201" time="0.020" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has id" time="0.020" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Movies Microservice / Get Movie by ID" id="85a63307-c3ca-4b28-97d5-a6dec49bed8b" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.018">
+    <testcase name="Status code is 200" time="0.018" classname="CinemaAbyssApiTests"/>
+    <testcase name="Movie ID matches" time="0.018" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Health Check" id="3c72c68a-60a8-4d05-ab10-51f2fd822c2a" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.012">
+    <testcase name="Status code is 200" time="0.012" classname="CinemaAbyssApiTests"/>
+    <testcase name="Status is true" time="0.012" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Create Movie Event" id="1c1b6ae0-e587-41f1-89eb-6e604232fca5" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.038">
+    <testcase name="Status code is 201" time="0.038" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has status success" time="0.038" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Create User Event" id="3c6ec531-4f03-4f29-a628-4863840a68d4" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.011">
+    <testcase name="Status code is 201" time="0.011" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has status success" time="0.011" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Events Microservice / Create Payment Event" id="c722e877-ae25-404b-8ae8-6185b09c5c5f" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.012">
+    <testcase name="Status code is 201" time="0.012" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response has status success" time="0.012" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Proxy Service / Health Check" id="608fca2d-84cf-4f17-a2a6-742dad95a458" timestamp="2026-01-01T18:47:54.798Z" tests="1" failures="0" errors="0" time="0.007">
+    <testcase name="Status code is 200" time="0.007" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Proxy Service / Get All Movies via Proxy" id="52c59bfb-1af0-4de9-97e2-e45ef2388f65" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.026">
+    <testcase name="Status code is 200" time="0.026" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response is an array" time="0.026" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+  <testsuite name="Proxy Service / Get All Users via Proxy" id="dd5c41e0-c156-454c-90da-6a7fb77581c3" timestamp="2026-01-01T18:47:54.798Z" tests="2" failures="0" errors="0" time="0.013">
+    <testcase name="Status code is 200" time="0.013" classname="CinemaAbyssApiTests"/>
+    <testcase name="Response is an array" time="0.013" classname="CinemaAbyssApiTests"/>
+  </testsuite>
+</testsuites>

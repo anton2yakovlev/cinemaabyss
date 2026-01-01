@@ -54,6 +54,7 @@ func main() {
 	http.HandleFunc("/health", healthHandler)
 	http.HandleFunc("/api/users", handleUsers)
 	http.HandleFunc("/api/movies", handleMovies)
+	http.HandleFunc("/api/movies/health", handleHealth)
 	http.HandleFunc("/api/payments", handlePayments)
 	http.HandleFunc("/api/subscriptions", handleSubscriptions)
 
@@ -172,6 +173,11 @@ func handleMovies(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]bool{"status": true})
 }
 
 func getAllMovies(w http.ResponseWriter, r *http.Request) {

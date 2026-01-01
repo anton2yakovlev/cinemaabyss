@@ -5,7 +5,7 @@ global:
 
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJnaGNyLmlvIjogewogICAgICAiYXV0aCI6ICJZVzUwYjI0eWVXRnJiM1pzWlhZNloyaHdYMmQ0YUZSVldIbGtTalF5UTFsc01qQkRNa0pNUkZKcFRWbzFXazlMT0ROTGN6TkdOQT09IgogICAgfQogIH0KfQo=
 # Database configuration
 database:
   host: postgres
@@ -33,9 +33,9 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
+    repository: ghcr.io/anton2yakovlev/cinemaabyss/monolith
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -53,9 +53,9 @@ monolith:
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
+    repository: ghcr.io/anton2yakovlev/cinemaabyss/proxy-service
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -73,9 +73,9 @@ proxyService:
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
+    repository: ghcr.io/anton2yakovlev/cinemaabyss/movies-service
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -93,9 +93,9 @@ moviesService:
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
+    repository: ghcr.io/anton2yakovlev/cinemaabyss/events-service
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -182,4 +182,4 @@ ingress:
 config:
   # Strangler Fig configuration
   gradualMigration: "true"
-  moviesMigrationPercent: "100"
+  moviesMigrationPercent: "50"
