@@ -19,8 +19,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "newman": "^6.2.1",
-    "newman-reporter-htmlextra": "^1.23.1",
+    "newman": "^5.3.2",
     "yargs": "^17.6.2"
   }
 }
