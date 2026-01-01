@@ -23,6 +23,7 @@ class Settings(BaseSettings):
 
 settings = Settings()
 app = FastAPI(title="CinemaAbyss Proxy Service")
+print("migration percent", settings.movies_migration_percent)
 
 
 async def proxy_request(
@@ -37,6 +38,7 @@ async def proxy_request(
     Проксирует запрос к целевому сервису
     """
     target_url = f"{url}{path}"
+    print("target_url", target_url)
     
     async with httpx.AsyncClient(timeout=30.0) as client:
         try:
@@ -77,6 +79,7 @@ def should_route_to_microservice() -> bool:
     """
     Определяет, нужно ли направить запрос к микросервису
     """
+    print(f"def should_route_to_microservice: {settings.gradual_migration} {settings.movies_migration_percent}")
     if not settings.gradual_migration:
         return True
     
@@ -94,32 +97,54 @@ async def health_check():
     }
 
 
-@app.api_route("/api/movies/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
-async def movies_proxy(request: Request, path: str = ''):
+async def handle_movies_proxy(request: Request, path: str = ''):
     """
-    Проксирует запросы к movies API
-    В зависимости от настроек направляет к монолиту или микросервису
+    Общая логика для проксирования запросов к movies API
     """
     body = await request.body()
     
     # Решаем куда направить запрос
+    print("Решаем куда направить запрос")
     if should_route_to_microservice():
+        print("Направляем запрос к микросервису")
         target_url = settings.movies_service_url
         service = "movies-microservice"
     else:
+        print("Направляем запрос к монолиту")
         target_url = settings.monolith_url
         service = "monolith"
     
     print(f"Routing /api/movies/{path} to {service}")
+    target_path = f"/api/movies/{path}" if path else "/api/movies"
+
     
     return await proxy_request(
         url=target_url,
         method=request.method,
-        path=f"/api/movies/{path}",
+        path=target_path,
         headers=dict(request.headers),
         body=body if body else None,
         params=dict(request.query_params)
     )
+
+
+@app.api_route("/api/movies", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def movies_proxy_root(request: Request):
+    """
+    Проксирует запросы к /api/movies (без дополнительного path)
+    """
+    print("Сработал movies_proxy_root")
+    return await handle_movies_proxy(request, path='')
+
+
+@app.api_route("/api/movies/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def movies_proxy(request: Request, path: str):
+    """
+    Проксирует запросы к movies API с дополнительным path
+    В зависимости от настроек направляет к монолиту или микросервису
+    """
+    print("Сработал movies_proxy")
+    return await handle_movies_proxy(request, path=path)
 
 
 @app.api_route("/api/events/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
@@ -149,6 +174,7 @@ async def default_proxy(path: str, request: Request):
     body = await request.body()
     
     print(f"Routing /{path} to monolith")
+    print("Сработал default_proxy")
     
     return await proxy_request(
         url=settings.monolith_url,
