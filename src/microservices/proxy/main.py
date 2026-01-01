@@ -79,7 +79,6 @@ def should_route_to_microservice() -> bool:
     """
     Определяет, нужно ли направить запрос к микросервису
     """
-    print(f"def should_route_to_microservice: {settings.gradual_migration} {settings.movies_migration_percent}")
     if not settings.gradual_migration:
         return True
     
@@ -104,7 +103,6 @@ async def handle_movies_proxy(request: Request, path: str = ''):
     body = await request.body()
     
     # Решаем куда направить запрос
-    print("Решаем куда направить запрос")
     if should_route_to_microservice():
         print("Направляем запрос к микросервису")
         target_url = settings.movies_service_url
