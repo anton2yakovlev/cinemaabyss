@@ -385,6 +385,10 @@ https://cinemaabyss.example.com/api/movies
 ![Вывод https://cinemaabyss.example.com/api/movies](screenshots/movies_api_2.png) 
 
 
+Запуск тестов после развертывания k8s. Команда запуска: `npm run test:kubernetes`
+
+![Результаты запуска тестов](screenshots/k8s_tests.png) 
+
 # Задание 5
 Компания планирует активно развиваться и для повышения надежности, безопасности, реализации сетевых паттернов типа Circuit Breaker и канареечного деплоя вам как архитектору необходимо развернуть istio и настроить circuit breaker для monolith и movies сервисов.
 
