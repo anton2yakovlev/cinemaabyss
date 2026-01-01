@@ -1,28 +1,28 @@
 {
-  "id": "kubernetes-env",
-  "name": "Kubernetes Environment",
+  "id": "local-env",
+  "name": "Local Environment",
   "values": [
     {
       "key": "baseUrl",
-      "value": "http://host.docker.internal:8000",
+      "value": "http://cinemaabyss.example.com",
       "type": "default",
       "enabled": true
     },
     {
       "key": "moviesServiceUrl",
-      "value": "http://host.docker.internal:8000",
+      "value": "http://cinemaabyss.example.com",
       "type": "default",
       "enabled": true
     },
     {
       "key": "eventsServiceUrl",
-      "value": "http://host.docker.internal:8082",
+      "value": "http://cinemaabyss.example.com",
       "type": "default",
       "enabled": true
     },
     {
       "key": "proxyServiceUrl",
-      "value": "http://host.docker.internal:8000",
+      "value": "http://cinemaabyss.example.com",
       "type": "default",
       "enabled": true
     }

@@ -81,9 +81,9 @@
 
 **Скриншоты тестов и состояния топиков:**  
 
-![Прогон тестов после выполнения задания 2](tests/postman/reports/postman-report.png) 
+![Прогон тестов после выполнения задания 2](screenshots/postman-report.png) 
 
-![Состояние топиков в kafka-ui](tests/postman/reports/kafka-topics-report.png)
+![Состояние топиков в kafka-ui](screenshots/kafka-topics-report.png)
 
 
 ## Задание 3
